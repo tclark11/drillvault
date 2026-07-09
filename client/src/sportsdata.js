@@ -1,0 +1,771 @@
+// ─── SPORT CONFIGURATIONS ────────────────────────────────────────────────────
+// Each sport has: id, label, emoji, color, queryName, ageGroups, categories
+
+export const SPORTS_CONFIG = {
+
+  // ── AFL ────────────────────────────────────────────────────────────────────
+  afl: {
+    label: "AFL",
+    emoji: "🏉",
+    color: "#F59E0B",
+    queryName: "AFL australian football",
+    categories: [
+      {
+        id: "kicking", label: "Kicking", emoji: "👟", color: "#F59E0B",
+        skills: [
+          { id: "drop punt kick AFL drill",         label: "Drop Punt" },
+          { id: "torpedo punt AFL drill",           label: "Torpedo / Torp" },
+          { id: "snap kick AFL drill",              label: "Snap / Check Side" },
+          { id: "banana kick AFL",                  label: "Banana Kick" },
+          { id: "place kick AFL",                   label: "Place Kick / Set Shot" },
+          { id: "kicking for goal AFL drill",       label: "Kicking for Goal" },
+          { id: "kicking accuracy AFL drill",       label: "Kicking Accuracy" },
+          { id: "kicking off both feet AFL",        label: "Kicking Off Both Feet" },
+          { id: "kicking under pressure AFL",       label: "Kicking Under Pressure" },
+          { id: "long kick AFL drill",              label: "Long Kicking" },
+        ],
+      },
+      {
+        id: "handballing", label: "Handballing", emoji: "✋", color: "#EF4444",
+        skills: [
+          { id: "handball technique AFL drill",     label: "Handball Technique" },
+          { id: "handball accuracy AFL drill",      label: "Handball Accuracy" },
+          { id: "handball under pressure AFL",      label: "Handball Under Pressure" },
+          { id: "handball both hands AFL drill",    label: "Both Hands Handballing" },
+          { id: "give and go AFL handball drill",   label: "Give & Go Handball" },
+          { id: "handball speed AFL drill",         label: "Speed Handballing" },
+        ],
+      },
+      {
+        id: "marking", label: "Marking", emoji: "🙌", color: "#00C896",
+        skills: [
+          { id: "overhead mark AFL drill",          label: "Overhead Mark" },
+          { id: "chest mark AFL drill",             label: "Chest Mark" },
+          { id: "contested marking AFL drill",      label: "Contested Marking" },
+          { id: "pack marking AFL drill",           label: "Pack Mark" },
+          { id: "marking lead up AFL drill",        label: "Lead Up & Mark" },
+          { id: "one on one marking AFL drill",     label: "1-on-1 Marking" },
+          { id: "marking under pressure AFL",       label: "Marking Under Pressure" },
+          { id: "speccy mark AFL drill",            label: "Speccy / Spectacular Mark" },
+        ],
+      },
+      {
+        id: "defence", label: "Defence & Tackling", emoji: "🛡️", color: "#8B5CF6",
+        skills: [
+          { id: "tackling technique AFL drill",     label: "Tackling Technique" },
+          { id: "bump technique AFL drill",         label: "Bump / Shepherd" },
+          { id: "spoil AFL drill",                  label: "Spoil / Punch" },
+          { id: "zone defence AFL",                 label: "Zone Defence" },
+          { id: "man to man defence AFL",           label: "Man-on-Man Defence" },
+          { id: "pressure defence AFL drill",       label: "Pressure & Smother" },
+          { id: "intercept AFL drill",              label: "Intercept Marking" },
+          { id: "defensive forward pressure AFL",   label: "Forward Pressure" },
+        ],
+      },
+      {
+        id: "ruck", label: "Ruck & Stoppage", emoji: "⬆️", color: "#3B82F6",
+        skills: [
+          { id: "ruck technique AFL drill",         label: "Ruck Technique" },
+          { id: "ball up AFL stoppage drill",       label: "Ball Up / Stoppage" },
+          { id: "boundary throw in AFL drill",      label: "Boundary Throw In" },
+          { id: "centre bounce AFL drill",          label: "Centre Bounce" },
+          { id: "ruck contest AFL drill",           label: "Ruck Contest" },
+        ],
+      },
+      {
+        id: "teamplay", label: "Team Concepts", emoji: "🤜", color: "#F97316",
+        skills: [
+          { id: "AFL corridor play drill",          label: "Corridor Play" },
+          { id: "AFL transition drill",             label: "Transition Play" },
+          { id: "AFL forward 50 entry drill",       label: "Forward 50 Entry" },
+          { id: "AFL defensive 50 drill",           label: "Defensive 50 Setup" },
+          { id: "AFL fast break drill",             label: "Fast Break" },
+          { id: "AFL set shot routine drill",       label: "Set Shot Routine" },
+          { id: "AFL kick in drill",                label: "Kick In / Defensive Restart" },
+          { id: "AFL small sided game drill",       label: "Small Sided Games" },
+          { id: "AFL game sense drill",             label: "Game Sense Drills" },
+        ],
+      },
+      {
+        id: "fitness", label: "Fitness & Fundamentals", emoji: "💪", color: "#EC4899",
+        skills: [
+          { id: "AFL agility drill",                label: "Agility & Footwork" },
+          { id: "AFL endurance drill",              label: "Endurance / Fitness" },
+          { id: "AFL speed drill",                  label: "Speed & Acceleration" },
+          { id: "AFL warmup drill",                 label: "Warm-Up Routines" },
+          { id: "AFL junior beginner drill",        label: "Beginner Fundamentals" },
+          { id: "AFL skills circuit drill",         label: "Skills Circuit" },
+        ],
+      },
+    ],
+  },
+
+  // ── BASKETBALL ─────────────────────────────────────────────────────────────
+  basketball: {
+    label: "Basketball",
+    emoji: "🏀",
+    color: "#00C896",
+    queryName: "basketball",
+    categories: [
+      {
+        id: "offense", label: "Offence", emoji: "⚡", color: "#F59E0B",
+        skills: [
+          { id: "5-out motion offense",              label: "5-Out Motion Offense" },
+          { id: "4-out 1-in motion offense",         label: "4-Out 1-In Motion Offense" },
+          { id: "pick and roll offense",             label: "Pick & Roll" },
+          { id: "give and go basketball",            label: "Give & Go" },
+          { id: "dribble drive motion offense",      label: "Dribble Drive Motion" },
+          { id: "horns offense basketball",          label: "Horns Offense" },
+          { id: "set plays basketball",              label: "Set Plays" },
+          { id: "fast break offense basketball",     label: "Fast Break" },
+          { id: "transition offense basketball",     label: "Transition Offense" },
+          { id: "backdoor cut basketball",           label: "Backdoor Cut" },
+          { id: "post play basketball",              label: "Post Play / Low Post" },
+          { id: "high post basketball offense",      label: "High Post Entry" },
+        ],
+      },
+      {
+        id: "defence", label: "Defence", emoji: "🛡️", color: "#EF4444",
+        skills: [
+          { id: "man to man defence basketball",     label: "Man-to-Man Defence" },
+          { id: "help defence basketball",           label: "Help Defence" },
+          { id: "2-3 zone defence basketball",       label: "2-3 Zone" },
+          { id: "1-3-1 zone defence basketball",     label: "1-3-1 Zone" },
+          { id: "full court press basketball",       label: "Full Court Press" },
+          { id: "closeout defence basketball",       label: "Closeout Technique" },
+          { id: "deny defence basketball",           label: "Deny / Denial Defence" },
+          { id: "box out rebounding basketball",     label: "Box Out & Rebounding" },
+          { id: "defensive rotation basketball",     label: "Defensive Rotations" },
+          { id: "pick and roll defence basketball",  label: "Pick & Roll Defence" },
+          { id: "shell drill basketball defence",    label: "Shell Drill" },
+          { id: "transition defence basketball",     label: "Transition Defence" },
+        ],
+      },
+      {
+        id: "shooting", label: "Shooting", emoji: "🏀", color: "#00C896",
+        skills: [
+          { id: "shooting form mechanics basketball",  label: "Shooting Form / Mechanics" },
+          { id: "catch and shoot basketball drill",    label: "Catch & Shoot" },
+          { id: "pull up jump shot basketball",        label: "Pull-Up Jump Shot" },
+          { id: "three point shooting drill basketball",label: "3-Point Shooting" },
+          { id: "free throw shooting basketball",      label: "Free Throw Routine" },
+          { id: "floater finish basketball",           label: "Floater / Tear Drop" },
+          { id: "layup drill basketball",              label: "Layups & Finishing" },
+          { id: "euro step basketball",                label: "Euro Step" },
+          { id: "corner three shooting basketball",    label: "Corner 3 Shooting" },
+        ],
+      },
+      {
+        id: "ballhandling", label: "Ball Handling", emoji: "✋", color: "#8B5CF6",
+        skills: [
+          { id: "crossover dribble basketball drill",    label: "Crossover" },
+          { id: "hesitation dribble basketball",         label: "Hesitation / Hesi" },
+          { id: "spin move dribble basketball",          label: "Spin Move" },
+          { id: "stationary dribbling drill basketball", label: "Stationary Dribbling" },
+          { id: "full court dribbling drill basketball", label: "Full Court Ball Handling" },
+          { id: "two ball dribbling drill basketball",   label: "Two-Ball Dribbling" },
+          { id: "ball handling pressure drill",          label: "Ball Handling Under Pressure" },
+        ],
+      },
+      {
+        id: "passing", label: "Passing", emoji: "🤝", color: "#3B82F6",
+        skills: [
+          { id: "chest pass basketball drill",       label: "Chest Pass" },
+          { id: "bounce pass basketball drill",      label: "Bounce Pass" },
+          { id: "skip pass basketball drill",        label: "Skip Pass" },
+          { id: "drive and kick basketball",         label: "Drive & Kick" },
+          { id: "outlet pass basketball",            label: "Outlet Pass" },
+          { id: "3 man weave basketball drill",      label: "3-Man Weave" },
+        ],
+      },
+      {
+        id: "team", label: "Team Concepts", emoji: "🤜", color: "#F97316",
+        skills: [
+          { id: "screening basketball drill",        label: "Setting Screens" },
+          { id: "3 on 3 basketball drill",           label: "3-on-3 Concepts" },
+          { id: "5 on 5 basketball drill",           label: "5-on-5 / Scrimmage" },
+          { id: "3 on 2 2 on 1 basketball",         label: "3-on-2 / 2-on-1" },
+          { id: "inbound plays basketball",          label: "Inbound Plays (BLOB/SLOB)" },
+          { id: "last second plays basketball",      label: "End of Game Situations" },
+        ],
+      },
+      {
+        id: "fundamentals", label: "Fundamentals", emoji: "📚", color: "#14B8A6",
+        skills: [
+          { id: "basketball fundamentals beginners", label: "Beginner Fundamentals" },
+          { id: "triple threat position basketball", label: "Triple Threat Position" },
+          { id: "basketball IQ youth",               label: "Basketball IQ / Game Sense" },
+          { id: "youth basketball practice plan",    label: "Practice Plan Ideas" },
+          { id: "basketball drills no equipment",    label: "No Equipment Needed" },
+        ],
+      },
+    ],
+  },
+
+  // ── FIELD HOCKEY ───────────────────────────────────────────────────────────
+  hockey: {
+    label: "Field Hockey",
+    emoji: "🏑",
+    color: "#3B82F6",
+    queryName: "field hockey",
+    categories: [
+      {
+        id: "passing", label: "Passing & Receiving", emoji: "🤝", color: "#3B82F6",
+        skills: [
+          { id: "field hockey push pass drill",      label: "Push Pass" },
+          { id: "field hockey hit pass drill",       label: "Hit Pass" },
+          { id: "field hockey slap pass drill",      label: "Slap Pass" },
+          { id: "field hockey receiving drill",      label: "Receiving / Trapping" },
+          { id: "field hockey one touch pass drill", label: "One-Touch Passing" },
+          { id: "field hockey pass and move drill",  label: "Pass & Move" },
+          { id: "field hockey aerial pass drill",    label: "Aerial / Lifted Pass" },
+          { id: "field hockey long pass drill",      label: "Long Passing" },
+        ],
+      },
+      {
+        id: "dribbling", label: "Dribbling", emoji: "✋", color: "#8B5CF6",
+        skills: [
+          { id: "field hockey dribbling drill",      label: "Dribbling Technique" },
+          { id: "field hockey 3D skills drill",      label: "3D Skills / Lifting" },
+          { id: "field hockey Indian dribble drill", label: "Indian Dribble" },
+          { id: "field hockey reverse stick drill",  label: "Reverse Stick" },
+          { id: "field hockey slalom dribble drill", label: "Slalom / Cone Dribbling" },
+          { id: "field hockey open stick drill",     label: "Open Stick Dribbling" },
+          { id: "field hockey dodge drill",          label: "Dodge & Beat Opponent" },
+        ],
+      },
+      {
+        id: "shooting", label: "Shooting & Finishing", emoji: "🥅", color: "#00C896",
+        skills: [
+          { id: "field hockey shooting drill",       label: "Shooting Technique" },
+          { id: "field hockey deflection drill",     label: "Deflections" },
+          { id: "field hockey penalty corner drill", label: "Penalty Corner" },
+          { id: "field hockey penalty stroke drill", label: "Penalty Stroke" },
+          { id: "field hockey circle entry drill",   label: "Circle Entry" },
+          { id: "field hockey one on one goalkeeper",label: "1-on-1 vs Goalkeeper" },
+          { id: "field hockey reverse hit drill",    label: "Reverse Hit / Slap Shot" },
+        ],
+      },
+      {
+        id: "defence", label: "Defence", emoji: "🛡️", color: "#EF4444",
+        skills: [
+          { id: "field hockey tackling drill",       label: "Tackling Technique" },
+          { id: "field hockey jab tackle drill",     label: "Jab Tackle" },
+          { id: "field hockey block tackle drill",   label: "Block Tackle" },
+          { id: "field hockey marking drill",        label: "Marking" },
+          { id: "field hockey zone defence drill",   label: "Zone Defence" },
+          { id: "field hockey man to man defence",   label: "Man-to-Man Defence" },
+          { id: "field hockey press drill",          label: "Press / High Press" },
+          { id: "field hockey penalty corner defence",label: "Penalty Corner Defence" },
+        ],
+      },
+      {
+        id: "goalkeeper", label: "Goalkeeping", emoji: "🧤", color: "#F59E0B",
+        skills: [
+          { id: "field hockey goalkeeper drill",     label: "Goalkeeping Basics" },
+          { id: "field hockey goalkeeper footwork",  label: "Goalkeeper Footwork" },
+          { id: "field hockey penalty corner save",  label: "Penalty Corner Saves" },
+          { id: "field hockey goalkeeper angles",    label: "Angle Play" },
+          { id: "field hockey goalkeeper distribution", label: "Distribution" },
+        ],
+      },
+      {
+        id: "team", label: "Team Concepts", emoji: "🤜", color: "#F97316",
+        skills: [
+          { id: "field hockey set plays drill",      label: "Set Plays" },
+          { id: "field hockey transition drill",     label: "Transition Play" },
+          { id: "field hockey counter attack drill", label: "Counter Attack" },
+          { id: "field hockey possession drill",     label: "Possession / Keep Ball" },
+          { id: "field hockey small sided game",     label: "Small Sided Games" },
+          { id: "field hockey penalty corner variation", label: "PC Variations" },
+          { id: "field hockey press trap drill",     label: "Press & Trap" },
+        ],
+      },
+      {
+        id: "fundamentals", label: "Fundamentals", emoji: "📚", color: "#14B8A6",
+        skills: [
+          { id: "field hockey beginner drill",       label: "Beginner Fundamentals" },
+          { id: "field hockey grip drill",           label: "Grip & Stick Handling" },
+          { id: "field hockey footwork drill",       label: "Footwork & Movement" },
+          { id: "field hockey agility drill",        label: "Agility & Fitness" },
+          { id: "field hockey warmup drill",         label: "Warm-Up Routines" },
+          { id: "field hockey junior drill",         label: "Junior / Youth Drills" },
+        ],
+      },
+    ],
+  },
+
+  // ── FOOTBALL (SOCCER) ──────────────────────────────────────────────────────
+  football: {
+    label: "Football (Soccer)",
+    emoji: "⚽",
+    color: "#10B981",
+    queryName: "soccer football",
+    categories: [
+      {
+        id: "passing", label: "Passing & Receiving", emoji: "🤝", color: "#3B82F6",
+        skills: [
+          { id: "soccer passing drill",              label: "Passing Technique" },
+          { id: "soccer short pass drill",           label: "Short Passing" },
+          { id: "soccer long pass drill",            label: "Long Passing" },
+          { id: "soccer one touch passing drill",    label: "One-Touch Passing" },
+          { id: "soccer through ball drill",         label: "Through Ball" },
+          { id: "soccer wall pass drill",            label: "Wall Pass / One-Two" },
+          { id: "soccer rondo drill",                label: "Rondo / Possession Circle" },
+          { id: "soccer receiving control drill",    label: "First Touch / Receiving" },
+          { id: "soccer switching play drill",       label: "Switching Play" },
+        ],
+      },
+      {
+        id: "dribbling", label: "Dribbling", emoji: "✋", color: "#8B5CF6",
+        skills: [
+          { id: "soccer dribbling drill",            label: "Dribbling Technique" },
+          { id: "soccer 1v1 dribbling drill",        label: "1v1 / Beating a Player" },
+          { id: "soccer step over drill",            label: "Step Over" },
+          { id: "soccer cruyff turn drill",          label: "Cruyff Turn" },
+          { id: "soccer scissors move drill",        label: "Scissors / Fake" },
+          { id: "soccer close control drill",        label: "Close Control" },
+          { id: "soccer speed dribbling drill",      label: "Speed Dribbling" },
+          { id: "soccer cone dribbling drill",       label: "Cone / Slalom Dribbling" },
+        ],
+      },
+      {
+        id: "shooting", label: "Shooting & Finishing", emoji: "⚽", color: "#10B981",
+        skills: [
+          { id: "soccer shooting drill",             label: "Shooting Technique" },
+          { id: "soccer finishing drill",            label: "Finishing / In Front of Goal" },
+          { id: "soccer volley drill",               label: "Volley" },
+          { id: "soccer heading drill",              label: "Heading" },
+          { id: "soccer chip shot drill",            label: "Chip Shot / Lob" },
+          { id: "soccer curl shot drill",            label: "Curl / Bending Shot" },
+          { id: "soccer penalty kick drill",         label: "Penalty Kicks" },
+          { id: "soccer crossing and finishing drill",label: "Crossing & Finishing" },
+        ],
+      },
+      {
+        id: "defence", label: "Defence", emoji: "🛡️", color: "#EF4444",
+        skills: [
+          { id: "soccer defending drill",            label: "Defending Technique" },
+          { id: "soccer 1v1 defending drill",        label: "1v1 Defending" },
+          { id: "soccer high press drill",           label: "High Press" },
+          { id: "soccer offside trap drill",         label: "Offside Trap" },
+          { id: "soccer defensive shape drill",      label: "Defensive Shape / Block" },
+          { id: "soccer heading defending drill",    label: "Defensive Heading" },
+          { id: "soccer zonal marking drill",        label: "Zonal Marking" },
+          { id: "soccer man marking drill",          label: "Man Marking" },
+        ],
+      },
+      {
+        id: "goalkeeper", label: "Goalkeeping", emoji: "🧤", color: "#F59E0B",
+        skills: [
+          { id: "soccer goalkeeper drill",           label: "Goalkeeping Basics" },
+          { id: "soccer goalkeeper diving drill",    label: "Diving Saves" },
+          { id: "soccer goalkeeper distribution",    label: "Distribution / Kicking" },
+          { id: "soccer goalkeeper positioning",     label: "Positioning & Angles" },
+          { id: "soccer goalkeeper footwork drill",  label: "Footwork" },
+          { id: "soccer penalty save drill",         label: "Penalty Saves" },
+        ],
+      },
+      {
+        id: "team", label: "Team Concepts", emoji: "🤜", color: "#F97316",
+        skills: [
+          { id: "soccer possession drill",           label: "Possession / Keep Ball" },
+          { id: "soccer pressing drill",             label: "Pressing & Gegenpressing" },
+          { id: "soccer counter attack drill",       label: "Counter Attack" },
+          { id: "soccer set piece drill",            label: "Set Pieces" },
+          { id: "soccer corner kick drill",          label: "Corner Kicks" },
+          { id: "soccer free kick drill",            label: "Free Kicks" },
+          { id: "soccer small sided game",           label: "Small Sided Games" },
+          { id: "soccer transition drill",           label: "Transition Play" },
+          { id: "soccer tiki taka drill",            label: "Tiki-Taka / Short Passing Game" },
+        ],
+      },
+      {
+        id: "fundamentals", label: "Fundamentals", emoji: "📚", color: "#14B8A6",
+        skills: [
+          { id: "soccer beginner drill",             label: "Beginner Fundamentals" },
+          { id: "soccer coerver drill",              label: "Coerver / Ball Mastery" },
+          { id: "soccer agility drill",              label: "Agility & Footwork" },
+          { id: "soccer warmup drill",               label: "Warm-Up Routines" },
+          { id: "soccer junior youth drill",         label: "Junior / Youth Drills" },
+          { id: "soccer fitness drill",              label: "Fitness & Conditioning" },
+        ],
+      },
+    ],
+  },
+
+  // ── NETBALL ────────────────────────────────────────────────────────────────
+  netball: {
+    label: "Netball",
+    emoji: "🥅",
+    color: "#8B5CF6",
+    queryName: "netball",
+    categories: [
+      {
+        id: "passing", label: "Passing", emoji: "🤝", color: "#3B82F6",
+        skills: [
+          { id: "netball chest pass drill",          label: "Chest Pass" },
+          { id: "netball bounce pass drill",         label: "Bounce Pass" },
+          { id: "netball overhead pass drill",       label: "Overhead / Lob Pass" },
+          { id: "netball shoulder pass drill",       label: "Shoulder Pass" },
+          { id: "netball one handed pass drill",     label: "One-Handed Pass" },
+          { id: "netball long pass drill",           label: "Long Passing" },
+          { id: "netball speed passing drill",       label: "Speed Passing" },
+          { id: "netball passing under pressure",    label: "Passing Under Pressure" },
+        ],
+      },
+      {
+        id: "catching", label: "Catching & Movement", emoji: "✋", color: "#8B5CF6",
+        skills: [
+          { id: "netball catching drill",            label: "Catching Technique" },
+          { id: "netball leading drill",             label: "Leading / Creating Space" },
+          { id: "netball dodge drill",               label: "Dodge & Drive" },
+          { id: "netball change of direction drill", label: "Change of Direction" },
+          { id: "netball footwork drill",            label: "Footwork / Landing" },
+          { id: "netball pivoting drill",            label: "Pivoting" },
+          { id: "netball offer and lead drill",      label: "Offer & Lead" },
+        ],
+      },
+      {
+        id: "shooting", label: "Shooting", emoji: "🥅", color: "#00C896",
+        skills: [
+          { id: "netball shooting drill",            label: "Shooting Technique" },
+          { id: "netball goal shooter drill",        label: "Goal Shooter Drills" },
+          { id: "netball goal attack drill",         label: "Goal Attack Drills" },
+          { id: "netball shooting under pressure",   label: "Shooting Under Pressure" },
+          { id: "netball penalty shot drill",        label: "Penalty / Free Pass Shot" },
+          { id: "netball rebound drill",             label: "Rebounding" },
+        ],
+      },
+      {
+        id: "defence", label: "Defence", emoji: "🛡️", color: "#EF4444",
+        skills: [
+          { id: "netball defending drill",           label: "Defending Technique" },
+          { id: "netball3 feet defending drill",     label: "3-Feet Defending" },
+          { id: "netball intercept drill",           label: "Intercept / Tipping" },
+          { id: "netball goalkeeping drill",         label: "Goal Keeper / Goal Defence" },
+          { id: "netball shadow defending drill",    label: "Shadow Defending" },
+          { id: "netball zone defence drill",        label: "Zone Defence" },
+          { id: "netball front defending drill",     label: "Front Defending" },
+        ],
+      },
+      {
+        id: "centre", label: "Centre Play", emoji: "⚡", color: "#F59E0B",
+        skills: [
+          { id: "netball centre pass drill",         label: "Centre Pass" },
+          { id: "netball wing attack drill",         label: "Wing Attack" },
+          { id: "netball wing defence drill",        label: "Wing Defence" },
+          { id: "netball centre court drill",        label: "Centre Court Movement" },
+          { id: "netball transtion play drill",      label: "Transition Play" },
+        ],
+      },
+      {
+        id: "team", label: "Team Concepts", emoji: "🤜", color: "#F97316",
+        skills: [
+          { id: "netball team attacking drill",      label: "Team Attack" },
+          { id: "netball team defending drill",      label: "Team Defence" },
+          { id: "netball circle edge drill",         label: "Circle Edge Play" },
+          { id: "netball set play drill",            label: "Set Plays" },
+          { id: "netball small sided game",          label: "Small Sided Games" },
+          { id: "netball fast break drill",          label: "Fast Break" },
+        ],
+      },
+      {
+        id: "fundamentals", label: "Fundamentals", emoji: "📚", color: "#14B8A6",
+        skills: [
+          { id: "netball beginner drill",            label: "Beginner Fundamentals" },
+          { id: "netball agility drill",             label: "Agility & Fitness" },
+          { id: "netball warmup drill",              label: "Warm-Up Routines" },
+          { id: "netball junior youth drill",        label: "Junior / Youth Drills" },
+          { id: "netball skills circuit",            label: "Skills Circuit" },
+        ],
+      },
+    ],
+  },
+
+  // ── RUGBY LEAGUE ───────────────────────────────────────────────────────────
+  rugby_league: {
+    label: "Rugby League",
+    emoji: "🏈",
+    color: "#EF4444",
+    queryName: "rugby league",
+    categories: [
+      {
+        id: "attack", label: "Attack", emoji: "⚡", color: "#F59E0B",
+        skills: [
+          { id: "rugby league running lines drill",  label: "Running Lines" },
+          { id: "rugby league play the ball drill",  label: "Play the Ball" },
+          { id: "rugby league dummy pass drill",     label: "Dummy Pass" },
+          { id: "rugby league offload drill",        label: "Offload" },
+          { id: "rugby league short side attack",    label: "Short Side Attack" },
+          { id: "rugby league kick and chase drill", label: "Kick & Chase" },
+          { id: "rugby league chip kick drill",      label: "Chip Kick" },
+          { id: "rugby league grubber kick drill",   label: "Grubber Kick" },
+          { id: "rugby league set play drill",       label: "Set Plays" },
+          { id: "rugby league last tackle kick",     label: "Last Tackle Options" },
+        ],
+      },
+      {
+        id: "passing", label: "Passing", emoji: "🤝", color: "#3B82F6",
+        skills: [
+          { id: "rugby league pass drill",           label: "Passing Technique" },
+          { id: "rugby league spin pass drill",      label: "Spin Pass" },
+          { id: "rugby league short pass drill",     label: "Short / Pop Pass" },
+          { id: "rugby league long pass drill",      label: "Long Pass" },
+          { id: "rugby league passing under pressure", label: "Passing Under Pressure" },
+          { id: "rugby league cut out pass drill",   label: "Cut Out Pass" },
+          { id: "rugby league passing speed drill",  label: "Speed Passing" },
+        ],
+      },
+      {
+        id: "defence", label: "Defence", emoji: "🛡️", color: "#EF4444",
+        skills: [
+          { id: "rugby league tackling drill",       label: "Tackling Technique" },
+          { id: "rugby league one on one tackle",    label: "1-on-1 Tackle" },
+          { id: "rugby league defensive line drill", label: "Defensive Line / Blitz" },
+          { id: "rugby league rush defence drill",   label: "Rush Defence" },
+          { id: "rugby league drift defence drill",  label: "Drift Defence" },
+          { id: "rugby league wrestling drill",      label: "Wrestling / Strip" },
+          { id: "rugby league kick defence drill",   label: "Kick Defence" },
+          { id: "rugby league goal line defence",    label: "Goal Line Defence" },
+        ],
+      },
+      {
+        id: "kicking", label: "Kicking", emoji: "👟", color: "#8B5CF6",
+        skills: [
+          { id: "rugby league kicking drill",        label: "Kicking Technique" },
+          { id: "rugby league punt kick drill",      label: "Punt Kick" },
+          { id: "rugby league bomb kick drill",      label: "Bomb / High Ball" },
+          { id: "rugby league conversion kick drill",label: "Conversion Kicking" },
+          { id: "rugby league field goal drill",     label: "Field Goal / Drop Goal" },
+          { id: "rugby league kick off drill",       label: "Kick Off" },
+        ],
+      },
+      {
+        id: "team", label: "Team Concepts", emoji: "🤜", color: "#F97316",
+        skills: [
+          { id: "rugby league spread play drill",    label: "Spread Play" },
+          { id: "rugby league ruck speed drill",     label: "Ruck Speed" },
+          { id: "rugby league bomb receive drill",   label: "Catching High Ball" },
+          { id: "rugby league small sided game",     label: "Small Sided Games" },
+          { id: "rugby league game sense drill",     label: "Game Sense Drills" },
+          { id: "rugby league line break drill",     label: "Line Break" },
+        ],
+      },
+      {
+        id: "fundamentals", label: "Fundamentals", emoji: "📚", color: "#14B8A6",
+        skills: [
+          { id: "rugby league junior beginner drill",label: "Beginner Fundamentals" },
+          { id: "rugby league agility drill",        label: "Agility & Footwork" },
+          { id: "rugby league fitness drill",        label: "Fitness & Conditioning" },
+          { id: "rugby league warmup drill",         label: "Warm-Up Routines" },
+          { id: "rugby league skills circuit",       label: "Skills Circuit" },
+        ],
+      },
+    ],
+  },
+
+  // ── RUGBY UNION ────────────────────────────────────────────────────────────
+  rugby_union: {
+    label: "Rugby Union",
+    emoji: "🏉",
+    color: "#EC4899",
+    queryName: "rugby union",
+    categories: [
+      {
+        id: "attack", label: "Attack", emoji: "⚡", color: "#F59E0B",
+        skills: [
+          { id: "rugby union running lines drill",   label: "Running Lines" },
+          { id: "rugby union offload drill",         label: "Offload" },
+          { id: "rugby union dummy pass drill",      label: "Dummy Pass" },
+          { id: "rugby union chip kick drill",       label: "Chip Kick" },
+          { id: "rugby union grubber kick drill",    label: "Grubber Kick" },
+          { id: "rugby union backs play drill",      label: "Backs Play" },
+          { id: "rugby union set play drill",        label: "Set Plays / Moves" },
+          { id: "rugby union overlap drill",         label: "Creating Overlap" },
+          { id: "rugby union kick and chase drill",  label: "Kick & Chase" },
+        ],
+      },
+      {
+        id: "passing", label: "Passing", emoji: "🤝", color: "#3B82F6",
+        skills: [
+          { id: "rugby union pass drill",            label: "Passing Technique" },
+          { id: "rugby union spin pass drill",       label: "Spin Pass" },
+          { id: "rugby union pop pass drill",        label: "Pop Pass" },
+          { id: "rugby union long pass drill",       label: "Long Pass" },
+          { id: "rugby union skip pass drill",       label: "Skip Pass" },
+          { id: "rugby union passing under pressure",label: "Passing Under Pressure" },
+        ],
+      },
+      {
+        id: "setpiece", label: "Set Piece", emoji: "🏉", color: "#8B5CF6",
+        skills: [
+          { id: "rugby union scrum drill",           label: "Scrum Technique" },
+          { id: "rugby union lineout drill",         label: "Lineout" },
+          { id: "rugby union lineout lifting drill", label: "Lineout Lifting" },
+          { id: "rugby union ruck drill",            label: "Ruck Technique" },
+          { id: "rugby union maul drill",            label: "Maul" },
+          { id: "rugby union scrum half drill",      label: "Scrum Half Play" },
+          { id: "rugby union restart drill",         label: "Restart / Kick Off" },
+        ],
+      },
+      {
+        id: "defence", label: "Defence", emoji: "🛡️", color: "#EF4444",
+        skills: [
+          { id: "rugby union tackling drill",        label: "Tackling Technique" },
+          { id: "rugby union one on one tackle",     label: "1-on-1 Tackle" },
+          { id: "rugby union defensive line drill",  label: "Defensive Line" },
+          { id: "rugby union blitz defence drill",   label: "Blitz Defence" },
+          { id: "rugby union drift defence drill",   label: "Drift Defence" },
+          { id: "rugby union jackal drill",          label: "Jackal / Turnover" },
+          { id: "rugby union goal line defence",     label: "Goal Line Defence" },
+        ],
+      },
+      {
+        id: "kicking", label: "Kicking", emoji: "👟", color: "#00C896",
+        skills: [
+          { id: "rugby union kicking drill",         label: "Kicking Technique" },
+          { id: "rugby union drop kick drill",       label: "Drop Kick" },
+          { id: "rugby union conversion drill",      label: "Conversion / Place Kick" },
+          { id: "rugby union box kick drill",        label: "Box Kick" },
+          { id: "rugby union up and under drill",    label: "Up & Under / Bomb" },
+          { id: "rugby union penalty kick drill",    label: "Penalty Kicking" },
+        ],
+      },
+      {
+        id: "fundamentals", label: "Fundamentals", emoji: "📚", color: "#14B8A6",
+        skills: [
+          { id: "rugby union junior beginner drill", label: "Beginner Fundamentals" },
+          { id: "rugby union agility drill",         label: "Agility & Footwork" },
+          { id: "rugby union fitness drill",         label: "Fitness & Conditioning" },
+          { id: "rugby union warmup drill",          label: "Warm-Up Routines" },
+          { id: "rugby union small sided game",      label: "Small Sided Games" },
+          { id: "rugby union skills circuit",        label: "Skills Circuit" },
+        ],
+      },
+    ],
+  },
+
+
+  // tennis
+  tennis: {
+    label: "Tennis",
+    emoji: "TEN",
+    color: "#84CC16",
+    queryName: "tennis",
+    categories: [
+      {
+        id: "serve", label: "Serve", emoji: "SRV", color: "#84CC16",
+        skills: [
+          { id: "tennis serve technique drill",      label: "Serve Technique" },
+          { id: "tennis flat serve drill",           label: "Flat Serve" },
+          { id: "tennis slice serve drill",          label: "Slice Serve" },
+          { id: "tennis kick serve drill",           label: "Kick / Topspin Serve" },
+          { id: "tennis second serve drill",         label: "Second Serve" },
+          { id: "tennis serve and volley drill",     label: "Serve & Volley" },
+          { id: "tennis ball toss drill",            label: "Ball Toss Consistency" },
+          { id: "tennis serve placement drill",      label: "Serve Placement" },
+        ],
+      },
+      {
+        id: "groundstrokes", label: "Groundstrokes", emoji: "GND", color: "#F59E0B",
+        skills: [
+          { id: "tennis forehand drill",             label: "Forehand Technique" },
+          { id: "tennis backhand drill",             label: "Backhand Technique" },
+          { id: "tennis topspin forehand drill",     label: "Topspin Forehand" },
+          { id: "tennis two handed backhand drill",  label: "Two-Handed Backhand" },
+          { id: "tennis one handed backhand drill",  label: "One-Handed Backhand" },
+          { id: "tennis slice backhand drill",       label: "Slice Backhand" },
+          { id: "tennis cross court drill",          label: "Cross-Court Rally" },
+          { id: "tennis down the line drill",        label: "Down the Line" },
+          { id: "tennis inside out forehand drill",  label: "Inside-Out Forehand" },
+          { id: "tennis rally consistency drill",    label: "Rally Consistency" },
+        ],
+      },
+      {
+        id: "volley", label: "Volley & Net Play", emoji: "NET", color: "#3B82F6",
+        skills: [
+          { id: "tennis volley drill",               label: "Volley Technique" },
+          { id: "tennis forehand volley drill",      label: "Forehand Volley" },
+          { id: "tennis backhand volley drill",      label: "Backhand Volley" },
+          { id: "tennis overhead smash drill",       label: "Overhead Smash" },
+          { id: "tennis approach shot drill",        label: "Approach Shot" },
+          { id: "tennis drop volley drill",          label: "Drop Volley" },
+          { id: "tennis net play drill",             label: "Net Play / Poaching" },
+          { id: "tennis half volley drill",          label: "Half Volley" },
+        ],
+      },
+      {
+        id: "specialty", label: "Specialty Shots", emoji: "SPL", color: "#EF4444",
+        skills: [
+          { id: "tennis drop shot drill",            label: "Drop Shot" },
+          { id: "tennis lob drill",                  label: "Lob" },
+          { id: "tennis passing shot drill",         label: "Passing Shot" },
+          { id: "tennis slice forehand drill",       label: "Slice Forehand" },
+          { id: "tennis return of serve drill",      label: "Return of Serve" },
+          { id: "tennis short ball drill",           label: "Short Ball Attack" },
+        ],
+      },
+      {
+        id: "footwork", label: "Footwork & Movement", emoji: "FTW", color: "#EC4899",
+        skills: [
+          { id: "tennis footwork drill",             label: "Footwork Basics" },
+          { id: "tennis split step drill",           label: "Split Step" },
+          { id: "tennis lateral movement drill",     label: "Lateral Movement" },
+          { id: "tennis recovery drill",             label: "Court Recovery" },
+          { id: "tennis agility drill",              label: "Agility / Speed" },
+          { id: "tennis spider drill",               label: "Spider Drill" },
+          { id: "tennis cone drill",                 label: "Cone Drills" },
+          { id: "tennis movement patterns drill",    label: "Movement Patterns" },
+        ],
+      },
+      {
+        id: "tactics", label: "Tactics & Match Play", emoji: "TAC", color: "#8B5CF6",
+        skills: [
+          { id: "tennis baseline tactics drill",     label: "Baseline Tactics" },
+          { id: "tennis net rushing tactics drill",  label: "Net Rushing" },
+          { id: "tennis doubles tactics drill",      label: "Doubles Tactics" },
+          { id: "tennis singles tactics drill",      label: "Singles Patterns" },
+          { id: "tennis pattern of play drill",      label: "Patterns of Play" },
+          { id: "tennis game situation drill",       label: "Game Situations" },
+          { id: "tennis tiebreak drill",             label: "Tiebreak Play" },
+          { id: "tennis pressure points drill",      label: "Pressure Points" },
+        ],
+      },
+      {
+        id: "fundamentals", label: "Fundamentals", emoji: "FND", color: "#14B8A6",
+        skills: [
+          { id: "tennis beginner drill",             label: "Beginner Fundamentals" },
+          { id: "tennis grip technique drill",       label: "Grip Technique" },
+          { id: "tennis ready position drill",       label: "Ready Position" },
+          { id: "tennis warm up drill",              label: "Warm-Up Routines" },
+          { id: "tennis junior youth drill",         label: "Junior / Youth Drills" },
+          { id: "tennis fitness conditioning drill", label: "Fitness & Conditioning" },
+          { id: "tennis mini tennis drill",          label: "Mini Tennis" },
+          { id: "tennis ball machine drill",         label: "Ball Machine Drills" },
+        ],
+      },
+    ],
+  },
+
+};
+
+export const AGE_GROUPS = [
+  { id: "",    label: "All Ages" },
+  { id: "u8",  label: "Under 8"  },
+  { id: "u10", label: "Under 10" },
+  { id: "u12", label: "Under 12" },
+  { id: "u14", label: "Under 14" },
+  { id: "u16", label: "Under 16" },
+  { id: "u18", label: "Under 18" },
+];
+
+export const AGE_QUERY_MAP = {
+  "":   "junior youth coaching",
+  u8:   "under 8 u8 kids beginner",
+  u10:  "under 10 u10 youth",
+  u12:  "under 12 u12 junior",
+  u14:  "under 14 u14 youth",
+  u16:  "under 16 u16 junior",
+  u18:  "under 18 u18 youth",
+};
