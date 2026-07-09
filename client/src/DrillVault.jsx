@@ -168,7 +168,8 @@ export default function DrillVault({ sport, onBack }) {
 
   try {
     const params = new URLSearchParams({ q: query, ...(pageToken ? { pageToken } : {}) });
-    const res = await fetch(`/api/search?${params}`);
+    const base = import.meta.env.VITE_API_URL || "";
+    const res = await fetch(`${base}/api/search?${params}`);
     const data = await res.json();
     if (!res.ok) { setError(data?.error || "Search failed."); return; }
     const items = data.items || [];
