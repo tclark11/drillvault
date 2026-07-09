@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { SPORTS_CONFIG, AGE_GROUPS, AGE_QUERY_MAP } from "./sportsdata";
 
 function buildQuery(sportQueryName, skillId, age, custom) {
@@ -156,6 +156,7 @@ export default function DrillVault({ sport, onBack }) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [lastQuery, setLastQuery] = useState("");
   const [activeVideoId, setActiveVideoId] = useState(null);
+  const resultsRef = useRef(null);
 
   const cat = categories.find(c => c.id === activeCat);
 
@@ -176,6 +177,9 @@ export default function DrillVault({ sport, onBack }) {
     setVideos(prev => first ? items : [...prev, ...items]);
     setNextPage(data.nextPageToken || null);
     setSearched(true);
+    setTimeout(() => {
+  resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+}, 100);
   } catch {
     setError("Network error — make sure the server is running on port 3001.");
   } finally {
@@ -341,10 +345,72 @@ const selectTerm = (term) => {
               {/* LOADING SKELETONS */}
               {loading && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>{Array.from({ length: 9 }).map((_, i) => <Skeleton key={i} />)}</div>}
 
+              {/* STICKY SELECTION BAR */}
+{(activeTerm || customQ || age) && (
+  <div style={{
+    position: "sticky",
+    top: 58,
+    zIndex: 99,
+    background: "rgba(8,12,20,0.95)",
+    backdropFilter: "blur(12px)",
+    borderBottom: `1px solid ${color}30`,
+    padding: "10px 0",
+    marginBottom: 8,
+  }}>
+    <div style={{
+      display: "flex", alignItems: "center",
+      justifyContent: "space-between", gap: 12,
+      flexWrap: "wrap",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: "#334155" }}>Searching:</span>
+        {activeTerm && (
+          <span style={{ background: `${color}18`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
+            {activeTerm.label}
+          </span>
+        )}
+        {customQ && (
+          <span style={{ background: `${color}18`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
+            "{customQ}"
+          </span>
+        )}
+        {age && (
+          <span style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
+            {AGE_GROUPS.find(a => a.id === age)?.label}
+          </span>
+        )}
+        {loading && (
+          <span style={{ fontSize: 12, color: "#475569" }}>Loading…</span>
+        )}
+      </div>
+      <button
+        onClick={() => {
+          setActiveTerm(null);
+          setCustomQ("");
+          setAge("");
+          setVideos([]);
+          setSearched(false);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        style={{
+          background: "rgba(255,255,255,0.04)",
+          border: "1.5px solid rgba(255,255,255,0.1)",
+          color: "#64748B", borderRadius: 8,
+          padding: "6px 14px", fontSize: 12,
+          fontWeight: 600, cursor: "pointer",
+          fontFamily: "inherit", whiteSpace: "nowrap",
+        }}
+      >
+        ✕ Clear
+      </button>
+    </div>
+  </div>
+)}
+
               {/* RESULTS */}
               {!loading && searched && (
                 <>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "28px 0 20px" }}>
+                  <div ref={resultsRef} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "28px 0 20px" }}>
                     <div style={{ fontSize: 17, fontWeight: 700 }}>
                       {activeTerm?.label || lastQuery}
                       {age ? <span style={{ color: "#475569", fontWeight: 400 }}> · {AGE_GROUPS.find(a => a.id === age)?.label}</span> : ""}
