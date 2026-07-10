@@ -53,10 +53,6 @@ export default function SportSelect({ onSelect }) {
             <p style={{ fontSize: 16, color: "#64748B", lineHeight: 1.6, maxWidth: 520, margin: "0 auto 24px" }}>
               The free coaching resource hub for junior sport coaches. Search by coaching terminology and watch videos right here — no endless YouTube scrolling.
             </p>
-
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, color: "#475569", fontWeight: 500 }}>
-              Pick your sport to get started
-            </div>
           </div>
 
           {/* SPORT GRID */}
