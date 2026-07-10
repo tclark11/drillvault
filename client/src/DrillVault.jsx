@@ -45,8 +45,6 @@ function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, ha
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.88)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <div onClick={e => e.stopPropagation()} style={{ background: "#0F1623", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: 18, width: "100%", maxWidth: 860, overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,0.6)" }}>
-
-        {/* iframe player */}
         <div style={{ position: "relative", paddingBottom: "56.25%", background: "#000" }}>
           <iframe
             width="100%" height="100%"
@@ -58,8 +56,6 @@ function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, ha
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
           />
         </div>
-
-        {/* Info */}
         <div style={{ padding: "16px 20px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, color, marginBottom: 5 }}>{snippet.channelTitle}</div>
@@ -76,8 +72,6 @@ function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, ha
             <button onClick={onClose} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 8, width: 34, height: 34, fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "inherit" }}>✕</button>
           </div>
         </div>
-
-        {/* Prev / Next */}
         <div style={{ display: "flex", gap: 8, padding: "0 20px 16px" }}>
           <button onClick={onPrev} disabled={!hasPrev} style={{ flex: 1, padding: "8px 0", borderRadius: 8, background: hasPrev ? "rgba(255,255,255,0.05)" : "transparent", border: `1.5px solid ${hasPrev ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.04)"}`, color: hasPrev ? "#94A3B8" : "#2D3748", fontSize: 13, fontWeight: 600, cursor: hasPrev ? "pointer" : "default", fontFamily: "inherit" }}>← Previous</button>
           <button onClick={onNext} disabled={!hasNext} style={{ flex: 1, padding: "8px 0", borderRadius: 8, background: hasNext ? `${color}18` : "transparent", border: `1.5px solid ${hasNext ? color : "rgba(255,255,255,0.04)"}`, color: hasNext ? color : "#2D3748", fontSize: 13, fontWeight: 600, cursor: hasNext ? "pointer" : "default", fontFamily: "inherit" }}>Next →</button>
@@ -95,10 +89,7 @@ function VideoCard({ video, saved, onSave, onWatch, isActive, color }) {
   const views = formatCount(statistics?.viewCount);
 
   return (
-    <div
-      onClick={() => onWatch(videoId)}
-      style={{ background: "#0F1623", border: `1.5px solid ${isActive ? color : "rgba(255,255,255,0.07)"}`, borderRadius: 14, overflow: "hidden", transition: "all 0.18s", cursor: "pointer", boxShadow: isActive ? `0 0 0 3px ${color}25` : "none" }}
-    >
+    <div onClick={() => onWatch(videoId)} style={{ background: "#0F1623", border: `1.5px solid ${isActive ? color : "rgba(255,255,255,0.07)"}`, borderRadius: 14, overflow: "hidden", transition: "all 0.18s", cursor: "pointer", boxShadow: isActive ? `0 0 0 3px ${color}25` : "none" }}>
       <div style={{ position: "relative", paddingBottom: "56.25%" }}>
         {thumb && <img src={thumb} alt={snippet.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(8,12,20,0.65) 0%, transparent 55%)" }} />
@@ -156,44 +147,59 @@ export default function DrillVault({ sport, onBack }) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [lastQuery, setLastQuery] = useState("");
   const [activeVideoId, setActiveVideoId] = useState(null);
-  const resultsRef = useRef(null);
+  const stickyBarRef = useRef(null);
 
   const cat = categories.find(c => c.id === activeCat);
 
   const search = useCallback(async (pageToken = null, termOverride = null) => {
-  const termToUse = termOverride !== null ? termOverride : activeTerm;
-  const query = buildQuery(queryName, termToUse?.id || "", age, customQ);
-  const first = !pageToken;
-  if (first) { setLoading(true); setError(null); setVideos([]); setLastQuery(query); }
-  else setLoadingMore(true);
+    const termToUse = termOverride !== null ? termOverride : activeTerm;
+    const query = buildQuery(queryName, termToUse?.id || "", age, customQ);
+    const first = !pageToken;
+    if (first) { setLoading(true); setError(null); setVideos([]); setLastQuery(query); }
+    else setLoadingMore(true);
 
-  try {
-    const params = new URLSearchParams({ q: query, ...(pageToken ? { pageToken } : {}) });
-    const base = import.meta.env.VITE_API_URL || "";
-    const res = await fetch(`${base}/api/search?${params}`);
-    const data = await res.json();
-    if (!res.ok) { setError(data?.error || "Search failed."); return; }
-    const items = data.items || [];
-    setVideos(prev => first ? items : [...prev, ...items]);
-    setNextPage(data.nextPageToken || null);
-    setSearched(true);
-    setTimeout(() => {
-  resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-}, 100);
-  } catch {
-    setError("Network error — make sure the server is running on port 3001.");
-  } finally {
-    setLoading(false);
-    setLoadingMore(false);
-  }
-}, [activeTerm, age, customQ, queryName]);
+    try {
+      const base = import.meta.env.VITE_API_URL || "";
+      const params = new URLSearchParams({ q: query, ...(pageToken ? { pageToken } : {}) });
+      const res = await fetch(`${base}/api/search?${params}`);
+      const data = await res.json();
+      if (!res.ok) { setError(data?.error || "Search failed."); return; }
+      const items = data.items || [];
+      setVideos(prev => first ? items : [...prev, ...items]);
+      setNextPage(data.nextPageToken || null);
+      setSearched(true);
+    } catch {
+      setError("Network error — make sure the server is running on port 3001.");
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [activeTerm, age, customQ, queryName]);
 
-const selectTerm = (term) => {
-  const newTerm = activeTerm?.id === term.id ? null : term;
-  setActiveTerm(newTerm);
-  setCustomQ("");
-  if (newTerm) search(null, newTerm);
-};
+  const selectTerm = (term) => {
+    const newTerm = activeTerm?.id === term.id ? null : term;
+    setActiveTerm(newTerm);
+    setCustomQ("");
+    if (newTerm) {
+      search(null, newTerm);
+      setTimeout(() => {
+        const el = stickyBarRef.current;
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 58;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }, 100);
+    }
+  };
+
+  const clearAll = () => {
+    setActiveTerm(null);
+    setCustomQ("");
+    setAge("");
+    setVideos([]);
+    setSearched(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const toggleSave = (videoId) => {
     const allVideos = [...videos, ...savedVideos];
@@ -210,6 +216,7 @@ const selectTerm = (term) => {
   const activeIndex = displayVideos.findIndex(v => (v.id?.videoId || v.id) === activeVideoId);
   const activeVideo = activeIndex >= 0 ? displayVideos[activeIndex] : null;
   const savedCount = Object.keys(saved).length;
+  const hasSelection = !!(activeTerm || customQ);
 
   return (
     <>
@@ -222,7 +229,6 @@ const selectTerm = (term) => {
         input:focus{border-color:${color}80!important;box-shadow:0 0 0 3px ${color}15;}
       `}</style>
 
-      {/* MODAL */}
       {activeVideo && (
         <VideoModal
           video={activeVideo} color={color}
@@ -240,7 +246,7 @@ const selectTerm = (term) => {
         {/* NAV */}
         <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(8,12,20,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.07)", padding: "0 24px", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button onClick={onBack} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 8, padding: "6px 12px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: 6 }}>
+            <button onClick={onBack} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 8, padding: "6px 12px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
               ← All Sports
             </button>
             <div style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: 6 }}>
@@ -256,6 +262,36 @@ const selectTerm = (term) => {
             </button>
           </div>
         </nav>
+
+        {/* STICKY SELECTION BAR — always rendered when there's a selection */}
+        {hasSelection && (
+          <div ref={stickyBarRef} style={{ position: "sticky", top: 58, zIndex: 99, background: "rgba(8,12,20,0.95)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${color}30`, padding: "10px 24px" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: "#334155" }}>Searching:</span>
+                {activeTerm && (
+                  <span style={{ background: `${color}18`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
+                    {activeTerm.label}
+                  </span>
+                )}
+                {customQ && (
+                  <span style={{ background: `${color}18`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
+                    "{customQ}"
+                  </span>
+                )}
+                {age && (
+                  <span style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
+                    {AGE_GROUPS.find(a => a.id === age)?.label}
+                  </span>
+                )}
+                {loading && <span style={{ fontSize: 12, color: "#475569" }}>Loading…</span>}
+              </div>
+              <button onClick={clearAll} style={{ background: "rgba(255,255,255,0.04)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#64748B", borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                ✕ Clear
+              </button>
+            </div>
+          </div>
+        )}
 
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
 
@@ -276,141 +312,89 @@ const selectTerm = (term) => {
           {/* SEARCH VIEW */}
           {view === "search" && (
             <>
-              {/* HERO */}
-              <div style={{ padding: "48px 0 36px" }}>
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: `${color}15`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "4px 12px", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 18 }}>
-                  <div style={{ width: 6, height: 6, background: color, borderRadius: "50%", animation: "blink 2s ease infinite" }} />
-                  {sport.label} Coaching · Free Drills
+              {/* HERO — only show when no selection */}
+              {!hasSelection && (
+                <div style={{ padding: "48px 0 36px" }}>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: `${color}15`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "4px 12px", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 18 }}>
+                    <div style={{ width: 6, height: 6, background: color, borderRadius: "50%", animation: "blink 2s ease infinite" }} />
+                    {sport.label} Coaching · Free Drills
+                  </div>
+                  <h1 style={{ fontSize: "clamp(30px, 5vw, 54px)", fontWeight: 800, lineHeight: 1.06, letterSpacing: "-1.5px", marginBottom: 14 }}>
+                    Find the right drill.<br /><span style={{ color }}>By the term coaches use.</span>
+                  </h1>
+                  <p style={{ fontSize: 16, color: "#64748B", lineHeight: 1.65, maxWidth: 480 }}>
+                    Search by {sport.label} coaching terminology and watch videos right here without leaving the page.
+                  </p>
                 </div>
-                <h1 style={{ fontSize: "clamp(30px, 5vw, 54px)", fontWeight: 800, lineHeight: 1.06, letterSpacing: "-1.5px", marginBottom: 14 }}>
-                  Find the right drill.<br /><span style={{ color }}>By the term coaches use.</span>
-                </h1>
-                <p style={{ fontSize: 16, color: "#64748B", lineHeight: 1.65, maxWidth: 480 }}>
-                  Search by {sport.label} coaching terminology and watch videos right here without leaving the page.
-                </p>
-              </div>
+              )}
 
-              {/* SEARCH BAR */}
-              <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
-                <input
-                  style={{ flex: 1, background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.09)", borderRadius: 10, color: "#E2E8F0", padding: "11px 16px", fontSize: 14, outline: "none", fontFamily: "inherit" }}
-                  placeholder={`Search ${sport.label} drills… e.g. "${cat?.skills[0]?.label || "passing drill"}"`}
-                  value={customQ}
-                  onChange={e => { setCustomQ(e.target.value); setActiveTerm(null); }}
-                  onKeyDown={e => e.key === "Enter" && search()}
-                />
-                {customQ && <button style={{ background: "transparent", border: "1.5px solid rgba(255,255,255,0.09)", borderRadius: 10, color: "#64748B", padding: "11px 14px", fontSize: 13, cursor: "pointer", fontFamily: "inherit" }} onClick={() => setCustomQ("")}>✕</button>}
-                <button style={{ background: loading ? "#1a1a1a" : color, color: loading ? "#555" : "#080C14", border: "none", borderRadius: 10, padding: "11px 28px", fontSize: 14, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }} onClick={() => search()} disabled={loading}>
-                  {loading ? "Searching…" : "Search"}
-                </button>
-              </div>
-
-              {/* AGE FILTER */}
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingBottom: 28, borderBottom: "1px solid rgba(255,255,255,0.06)", alignItems: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: "#334155" }}>Age Group</span>
-                {AGE_GROUPS.map(a => (
-                  <button key={a.id} onClick={() => setAge(a.id)} style={{ padding: "5px 14px", borderRadius: 100, border: `1.5px solid ${age === a.id ? color : "rgba(255,255,255,0.09)"}`, background: age === a.id ? `${color}20` : "rgba(255,255,255,0.03)", color: age === a.id ? color : "#64748B", fontSize: 12, fontWeight: 600, cursor: "pointer", userSelect: "none", fontFamily: "inherit" }}>
-                    {a.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* CATEGORY TABS */}
-              <div style={{ padding: "28px 0 0" }}>
-                <div style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: "#334155", marginBottom: 16 }}>Browse by Coaching Concept</div>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
-                  {categories.map(c => (
-                    <button key={c.id} onClick={() => { setActiveCat(c.id); setActiveTerm(null); setCustomQ(""); }} style={{ padding: "7px 16px", borderRadius: 100, border: `1.5px solid ${activeCat === c.id ? c.color : "rgba(255,255,255,0.08)"}`, background: activeCat === c.id ? `${c.color}18` : "rgba(255,255,255,0.03)", color: activeCat === c.id ? c.color : "#64748B", fontSize: 13, fontWeight: 600, cursor: "pointer", userSelect: "none", transition: "all 0.15s", fontFamily: "inherit" }}>
-                      {c.emoji} {c.label}
+              {/* SEARCH & FILTERS — only show when no selection */}
+              {!hasSelection && (
+                <>
+                  <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
+                    <input
+                      style={{ flex: 1, background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.09)", borderRadius: 10, color: "#E2E8F0", padding: "11px 16px", fontSize: 14, outline: "none", fontFamily: "inherit" }}
+                      placeholder={`Search ${sport.label} drills…`}
+                      value={customQ}
+                      onChange={e => setCustomQ(e.target.value)}
+                      onKeyDown={e => { if (e.key === "Enter") { search(null, null); setTimeout(() => { const el = stickyBarRef.current; if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 58; window.scrollTo({ top, behavior: "smooth" }); } }, 100); } }}
+                    />
+                    <button style={{ background: loading ? "#1a1a1a" : color, color: loading ? "#555" : "#080C14", border: "none", borderRadius: 10, padding: "11px 28px", fontSize: 14, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}
+                      onClick={() => { search(null, null); setTimeout(() => { const el = stickyBarRef.current; if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 58; window.scrollTo({ top, behavior: "smooth" }); } }, 100); }}
+                      disabled={loading}>
+                      {loading ? "Searching…" : "Search"}
                     </button>
-                  ))}
-                </div>
+                  </div>
 
-                {/* TERM GRID */}
-                {cat && (
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: 8, marginBottom: 24 }}>
-                    {cat.skills.map(sk => (
-                      <button key={sk.id} onClick={() => selectTerm(sk)} style={{ padding: "9px 14px", borderRadius: 8, textAlign: "left", border: `1.5px solid ${activeTerm?.id === sk.id ? cat.color : "rgba(255,255,255,0.07)"}`, background: activeTerm?.id === sk.id ? `${cat.color}14` : "rgba(255,255,255,0.02)", color: activeTerm?.id === sk.id ? cat.color : "#94A3B8", fontSize: 13, fontWeight: activeTerm?.id === sk.id ? 600 : 400, cursor: "pointer", fontFamily: "inherit", transition: "all 0.12s" }}>
-                        {activeTerm?.id === sk.id ? "✓ " : ""}{sk.label}
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingBottom: 28, borderBottom: "1px solid rgba(255,255,255,0.06)", alignItems: "center", marginBottom: 0 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: "#334155" }}>Age Group</span>
+                    {AGE_GROUPS.map(a => (
+                      <button key={a.id} onClick={() => setAge(a.id)} style={{ padding: "5px 14px", borderRadius: 100, border: `1.5px solid ${age === a.id ? color : "rgba(255,255,255,0.09)"}`, background: age === a.id ? `${color}20` : "rgba(255,255,255,0.03)", color: age === a.id ? color : "#64748B", fontSize: 12, fontWeight: 600, cursor: "pointer", userSelect: "none", fontFamily: "inherit" }}>
+                        {a.label}
                       </button>
                     ))}
                   </div>
-                )}
 
-              </div>
+                  {/* CATEGORY TABS */}
+                  <div style={{ padding: "28px 0 0" }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: "#334155", marginBottom: 16 }}>Browse by Coaching Concept</div>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
+                      {categories.map(c => (
+                        <button key={c.id} onClick={() => { setActiveCat(c.id); setActiveTerm(null); setCustomQ(""); }} style={{ padding: "7px 16px", borderRadius: 100, border: `1.5px solid ${activeCat === c.id ? c.color : "rgba(255,255,255,0.08)"}`, background: activeCat === c.id ? `${c.color}18` : "rgba(255,255,255,0.03)", color: activeCat === c.id ? c.color : "#64748B", fontSize: 13, fontWeight: 600, cursor: "pointer", userSelect: "none", transition: "all 0.15s", fontFamily: "inherit" }}>
+                          {c.emoji} {c.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {cat && (
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: 8, marginBottom: 24 }}>
+                        {cat.skills.map(sk => (
+                          <button key={sk.id} onClick={() => selectTerm(sk)} style={{ padding: "9px 14px", borderRadius: 8, textAlign: "left", border: `1.5px solid rgba(255,255,255,0.07)`, background: "rgba(255,255,255,0.02)", color: "#94A3B8", fontSize: 13, fontWeight: 400, cursor: "pointer", fontFamily: "inherit", transition: "all 0.12s" }}>
+                            {sk.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
 
               {/* ERROR */}
               {error && <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 10, padding: "13px 18px", color: "#FCA5A5", fontSize: 13, marginBottom: 20 }}>⚠️ {error}</div>}
 
               {/* LOADING SKELETONS */}
-              {loading && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>{Array.from({ length: 9 }).map((_, i) => <Skeleton key={i} />)}</div>}
-
-              {/* STICKY SELECTION BAR */}
-{(activeTerm || customQ || age) && (
-  <div style={{
-    position: "sticky",
-    top: 58,
-    zIndex: 99,
-    background: "rgba(8,12,20,0.95)",
-    backdropFilter: "blur(12px)",
-    borderBottom: `1px solid ${color}30`,
-    padding: "10px 0",
-    marginBottom: 8,
-  }}>
-    <div style={{
-      display: "flex", alignItems: "center",
-      justifyContent: "space-between", gap: 12,
-      flexWrap: "wrap",
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: "#334155" }}>Searching:</span>
-        {activeTerm && (
-          <span style={{ background: `${color}18`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
-            {activeTerm.label}
-          </span>
-        )}
-        {customQ && (
-          <span style={{ background: `${color}18`, border: `1px solid ${color}35`, color, borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
-            "{customQ}"
-          </span>
-        )}
-        {age && (
-          <span style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 100, padding: "3px 12px", fontSize: 12, fontWeight: 600 }}>
-            {AGE_GROUPS.find(a => a.id === age)?.label}
-          </span>
-        )}
-        {loading && (
-          <span style={{ fontSize: 12, color: "#475569" }}>Loading…</span>
-        )}
-      </div>
-      <button
-        onClick={() => {
-          setActiveTerm(null);
-          setCustomQ("");
-          setAge("");
-          setVideos([]);
-          setSearched(false);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }}
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1.5px solid rgba(255,255,255,0.1)",
-          color: "#64748B", borderRadius: 8,
-          padding: "6px 14px", fontSize: 12,
-          fontWeight: 600, cursor: "pointer",
-          fontFamily: "inherit", whiteSpace: "nowrap",
-        }}
-      >
-        ✕ Clear
-      </button>
-    </div>
-  </div>
-)}
+              {loading && (
+                <div style={{ padding: "24px 0" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+                    {Array.from({ length: 9 }).map((_, i) => <Skeleton key={i} />)}
+                  </div>
+                </div>
+              )}
 
               {/* RESULTS */}
               {!loading && searched && (
                 <>
-                  <div ref={resultsRef} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "28px 0 20px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 0 20px" }}>
                     <div style={{ fontSize: 17, fontWeight: 700 }}>
                       {activeTerm?.label || lastQuery}
                       {age ? <span style={{ color: "#475569", fontWeight: 400 }}> · {AGE_GROUPS.find(a => a.id === age)?.label}</span> : ""}
@@ -437,11 +421,11 @@ const selectTerm = (term) => {
               )}
 
               {/* IDLE */}
-              {!loading && !searched && !error && (
+              {!loading && !searched && !error && !hasSelection && (
                 <div style={{ textAlign: "center", padding: "72px 0" }}>
                   <div style={{ fontSize: 44, marginBottom: 14 }}>{sport.emoji}</div>
                   <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Pick a coaching concept above</div>
-                  <div style={{ fontSize: 14, color: "#475569", lineHeight: 1.65 }}>Select a category, choose a term, then hit Go — or type anything into the search bar.</div>
+                  <div style={{ fontSize: 14, color: "#475569", lineHeight: 1.65 }}>Select a category, choose a term — videos load instantly.</div>
                 </div>
               )}
             </>
