@@ -216,17 +216,23 @@ export default function DrillVault({ sport, onBack }) {
   const activeIndex = displayVideos.findIndex(v => (v.id?.videoId || v.id) === activeVideoId);
   const activeVideo = activeIndex >= 0 ? displayVideos[activeIndex] : null;
   const savedCount = Object.keys(saved).length;
-  const hasSelection = !!(activeTerm || customQ);
+  const hasSelection = !!(activeTerm || (customQ && searched));
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+       @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
         body{background:#080C14;}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.35}}
         button:hover{filter:brightness(1.1);}
         input:focus{border-color:${color}80!important;box-shadow:0 0 0 3px ${color}15;}
+        .nav-icon { display: none; }
+        .nav-label { display: inline; }
+          @media (max-width: 480px) {
+          .nav-icon { display: inline; }
+          .nav-label { display: none; }
+          }
       `}</style>
 
       {activeVideo && (
@@ -241,14 +247,14 @@ export default function DrillVault({ sport, onBack }) {
         />
       )}
 
-      <div style={{ minHeight: "100vh", background: "#080C14", color: "#E2E8F0", fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ minHeight: "100vh", background: "#080C14", color: "#E2E8F0", fontFamily: "'Open Sans', sans-serif" }}>
 
         {/* NAV */}
         <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(8,12,20,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.07)", padding: "0 24px", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button onClick={onBack} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 8, padding: "6px 12px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-              ← All Sports
-            </button>
+            <button onClick={onBack} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 8, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontFamily: "inherit", fontSize: 18 }}>
+  ‹
+</button>
             <div style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: 6 }}>
               Drill<span style={{ color }}>Vault</span>
               <span style={{ fontSize: 16 }}>{sport.emoji}</span>
@@ -256,10 +262,22 @@ export default function DrillVault({ sport, onBack }) {
             </div>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => setView("search")} style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${view === "search" ? `${color}55` : "rgba(255,255,255,0.08)"}`, background: view === "search" ? `${color}18` : "transparent", color: view === "search" ? color : "#64748B", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Search</button>
-            <button onClick={() => setView("saved")} style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${view === "saved" ? `${color}55` : "rgba(255,255,255,0.08)"}`, background: view === "saved" ? `${color}18` : "transparent", color: view === "saved" ? color : "#64748B", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-              ♥ Saved{savedCount > 0 && <span style={{ background: color, color: "#080C14", borderRadius: 100, fontSize: 10, fontWeight: 800, padding: "1px 6px", marginLeft: 4 }}>{savedCount}</span>}
-            </button>
+            <button onClick={() => { 
+  setView("search"); 
+  setActiveTerm(null); 
+  setCustomQ(""); 
+  setVideos([]); 
+  setSearched(false); 
+  window.scrollTo({ top: 0, behavior: "smooth" }); 
+}} style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${view === "search" ? `${color}55` : "rgba(255,255,255,0.08)"}`, background: view === "search" ? `${color}18` : "transparent", color: view === "search" ? color : "#64748B", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+  <span className="nav-label">Search</span>
+  <span className="nav-icon">🔍</span>
+</button>
+<button onClick={() => setView("saved")} style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${view === "saved" ? `${color}55` : "rgba(255,255,255,0.08)"}`, background: view === "saved" ? `${color}18` : "transparent", color: view === "saved" ? color : "#64748B", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+  <span className="nav-label">♥ Saved</span>
+  <span className="nav-icon">♥</span>
+  {savedCount > 0 && <span style={{ background: color, color: "#080C14", borderRadius: 100, fontSize: 10, fontWeight: 800, padding: "1px 6px", marginLeft: 4 }}>{savedCount}</span>}
+</button>
           </div>
         </nav>
 
@@ -337,10 +355,10 @@ export default function DrillVault({ sport, onBack }) {
                       placeholder={`Search ${sport.label} drills…`}
                       value={customQ}
                       onChange={e => setCustomQ(e.target.value)}
-                      onKeyDown={e => { if (e.key === "Enter") { search(null, null); setTimeout(() => { const el = stickyBarRef.current; if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 58; window.scrollTo({ top, behavior: "smooth" }); } }, 100); } }}
+                      onKeyDown={e => { if (e.key === "Enter") { search(); setTimeout(() => { const el = stickyBarRef.current; if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 58; window.scrollTo({ top, behavior: "smooth" }); } }, 100); } }}
                     />
                     <button style={{ background: loading ? "#1a1a1a" : color, color: loading ? "#555" : "#080C14", border: "none", borderRadius: 10, padding: "11px 28px", fontSize: 14, fontWeight: 700, cursor: loading ? "not-allowed" : "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}
-                      onClick={() => { search(null, null); setTimeout(() => { const el = stickyBarRef.current; if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 58; window.scrollTo({ top, behavior: "smooth" }); } }, 100); }}
+                      onClick={() => { search(); setTimeout(() => { const el = stickyBarRef.current; if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 58; window.scrollTo({ top, behavior: "smooth" }); } }, 100); }}
                       disabled={loading}>
                       {loading ? "Searching…" : "Search"}
                     </button>

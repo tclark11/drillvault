@@ -17,7 +17,7 @@ export default function SportSelect({ onSelect }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #080C14; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
@@ -26,7 +26,7 @@ export default function SportSelect({ onSelect }) {
         @media (min-width: 768px) { .sport-grid { grid-template-columns: repeat(4, 1fr) !important; } }
       `}</style>
 
-      <div style={{ minHeight: "100vh", background: "#080C14", color: "#E2E8F0", fontFamily: "'DM Sans', sans-serif", position: "relative", overflow: "hidden" }}>
+      <div style={{ minHeight: "100vh", background: "#080C14", color: "#E2E8F0", fontFamily: "'Open Sans', sans-serif", position: "relative", overflow: "hidden" }}>
 
         {/* Grid background */}
         <div style={{ position: "fixed", inset: 0, pointerEvents: "none", backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(255,255,255,0.025) 47px, rgba(255,255,255,0.025) 48px), repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(255,255,255,0.025) 47px, rgba(255,255,255,0.025) 48px)` }} />
@@ -36,15 +36,16 @@ export default function SportSelect({ onSelect }) {
           <div style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: 8 }}>
             Drill<span style={{ color: "#00C896" }}>Vault</span> <span style={{ fontSize: 20 }}>🏆</span>
           </div>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#00C896", background: "rgba(0,200,150,0.1)", border: "1px solid rgba(0,200,150,0.25)", padding: "4px 12px", borderRadius: 100 }}>
-            Free · Junior Sport · Coaching Drills
-          </div>
         </nav>
 
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
 
           {/* HERO */}
           <div style={{ padding: "72px 0 56px", textAlign: "center" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(0,200,150,0.08)", border: "1px solid rgba(0,200,150,0.2)", color: "#00C896", borderRadius: 100, padding: "5px 16px", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginBottom: 24 }}>
+          <span style={{ width: 6, height: 6, background: "#00C896", borderRadius: "50%", display: "inline-block", animation: "blink 2s ease infinite" }} />
+  Free · Junior Sport · Coaching Drills
+          </div>
             <h1 style={{ fontSize: "clamp(32px, 7vw, 80px)", fontWeight: 900, lineHeight: 1.0, letterSpacing: "-2px", marginBottom: 16, }}>
               Every drill.<br />
               <span style={{ color: "#00C896" }}>Every sport.</span>
