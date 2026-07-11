@@ -11,7 +11,7 @@ const SPORTS = [
   { id: "tennis", label: "Tennis", emoji: "TEN", description: "Serve, groundstrokes, volleys, footwork & match tactics", color: "#84CC16", bg: "linear-gradient(135deg, #0d1a00, #172900)" },
 ];
 
-export default function SportSelect({ onSelect }) {
+export default function SportSelect({ onSelect, savedCount, onShowSaved, savedVideos, saved, toggleSave, showSaved, onHideSaved }) {
   const [hovered, setHovered] = useState(null);
 
   return (
@@ -32,11 +32,64 @@ export default function SportSelect({ onSelect }) {
         <div style={{ position: "fixed", inset: 0, pointerEvents: "none", backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(255,255,255,0.025) 47px, rgba(255,255,255,0.025) 48px), repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(255,255,255,0.025) 47px, rgba(255,255,255,0.025) 48px)` }} />
 
         {/* NAV */}
-        <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(8,12,20,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.07)", padding: "0 32px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: 8 }}>
-            Drill<span style={{ color: "#00C896" }}>Vault</span> <span style={{ fontSize: 20 }}>🏆</span>
-          </div>
-        </nav>
+       <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(8,12,20,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.07)", padding: "0 32px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+  <div style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: 8 }}>
+    Drill<span style={{ color: "#00C896" }}>Vault</span> <span style={{ fontSize: 20 }}>🏆</span>
+  </div>
+  <button
+    onClick={onShowSaved}
+    style={{ padding: "6px 16px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.08)", background: "transparent", color: "#64748B", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: 6 }}
+  >
+    ♥ Saved
+    {savedCount > 0 && (
+      <span style={{ background: "#00C896", color: "#080C14", borderRadius: 100, fontSize: 10, fontWeight: 800, padding: "1px 6px" }}>
+        {savedCount}
+      </span>
+    )}
+  </button>
+</nav>
+
+{showSaved && (
+  <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+      <h2 style={{ fontSize: 22, fontWeight: 700 }}>Saved Drills</h2>
+      <button onClick={onHideSaved} style={{ background: "transparent", border: "1.5px solid rgba(255,255,255,0.1)", color: "#64748B", borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+        ← Back to Sports
+      </button>
+    </div>
+    {savedCount === 0
+      ? <div style={{ textAlign: "center", padding: "72px 0" }}>
+          <div style={{ fontSize: 44, marginBottom: 14 }}>♡</div>
+          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Nothing saved yet</div>
+          <div style={{ fontSize: 14, color: "#475569" }}>Pick a sport and save drills to find them here.</div>
+        </div>
+      : <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+          {savedVideos.map(v => {
+            const vid = v.id?.videoId || v.id;
+            const url = `https://www.youtube.com/watch?v=${vid}`;
+            const thumb = v.snippet?.thumbnails?.medium?.url;
+            return (
+              <div key={vid} style={{ background: "#0F1623", border: "1.5px solid rgba(0,200,150,0.35)", borderRadius: 14, overflow: "hidden" }}>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {thumb && <img src={thumb} alt={v.snippet.title} style={{ width: "100%", display: "block" }} />}
+                </a>
+                <div style={{ padding: "13px 15px 10px" }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, color: "#00C896", marginBottom: 5 }}>{v.snippet.channelTitle}</div>
+                  <div style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.42, color: "#E2E8F0", marginBottom: 7, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{v.snippet.title}</div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 15px", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                  <a href={url} target="_blank" rel="noopener noreferrer" style={{ background: "rgba(0,200,150,0.1)", border: "1.5px solid rgba(0,200,150,0.25)", color: "#00C896", borderRadius: 7, padding: "6px 14px", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>▶ Watch</a>
+                  <button onClick={() => toggleSave(vid, v)} style={{ background: "rgba(0,200,150,0.1)", border: "1.5px solid rgba(0,200,150,0.3)", color: "#00C896", borderRadius: 7, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                    ♥ Remove
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+    }
+  </div>
+)}
 
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
 

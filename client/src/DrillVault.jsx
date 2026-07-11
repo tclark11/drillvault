@@ -44,7 +44,7 @@ function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, ha
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.88)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-      <div onClick={e => e.stopPropagation()} style={{ background: "#0F1623", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: 18, width: "100%", maxWidth: 860, overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,0.6)" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: "#0F1623", border: "1.5px solid rgba(255,255,255,0.1)", borderRadius: 18, width: "100%", maxWidth: 860, overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,0.6)", fontFamily: "'Open Sans', sans-serif" }}>
         <div style={{ position: "relative", paddingBottom: "56.25%", background: "#000" }}>
           <iframe
             width="100%" height="100%"
@@ -128,7 +128,7 @@ function Skeleton() {
 }
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
-export default function DrillVault({ sport, onBack }) {
+export default function DrillVault({ sport, onBack, saved, savedVideos, toggleSave, savedCount, onShowSaved }) {
   const config = SPORTS_CONFIG[sport.id];
   const { color, queryName, categories } = config;
 
@@ -140,8 +140,6 @@ export default function DrillVault({ sport, onBack }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
-  const [saved, setSaved] = useState({});
-  const [savedVideos, setSavedVideos] = useState([]);
   const [view, setView] = useState("search");
   const [nextPage, setNextPage] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -201,21 +199,9 @@ export default function DrillVault({ sport, onBack }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const toggleSave = (videoId) => {
-    const allVideos = [...videos, ...savedVideos];
-    const vid = allVideos.find(v => (v.id?.videoId || v.id) === videoId);
-    setSaved(prev => {
-      const next = { ...prev };
-      if (next[videoId]) { delete next[videoId]; setSavedVideos(l => l.filter(v => (v.id?.videoId || v.id) !== videoId)); }
-      else { next[videoId] = true; if (vid) setSavedVideos(l => [...l, vid]); }
-      return next;
-    });
-  };
-
   const displayVideos = view === "saved" ? savedVideos : videos;
   const activeIndex = displayVideos.findIndex(v => (v.id?.videoId || v.id) === activeVideoId);
   const activeVideo = activeIndex >= 0 ? displayVideos[activeIndex] : null;
-  const savedCount = Object.keys(saved).length;
   const hasSelection = !!(activeTerm || (customQ && searched));
 
   return (
