@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SportSelect from "./SportSelect";
 import DrillVault from "./DrillVault";
+import { SPORTS_CONFIG } from "./sportsdata";
 
 export default function App() {
-  const [selectedSport, setSelectedSport] = useState(null);
-  const [showSaved, setShowSaved] = useState(false);
-
   const [saved, setSaved] = useState(() => {
     try {
       const s = localStorage.getItem("drillvault_saved");
@@ -19,6 +17,35 @@ export default function App() {
       return v ? JSON.parse(v) : [];
     } catch { return []; }
   });
+
+  const [showSaved, setShowSaved] = useState(false);
+
+  // Read sport from URL path e.g. /basketball
+  const getSportFromURL = () => {
+    const path = window.location.pathname.replace("/", "").toLowerCase();
+    return SPORTS_CONFIG[path] ? path : null;
+  };
+
+  const [currentSportId, setCurrentSportId] = useState(getSportFromURL);
+
+  const navigateTo = (sportId) => {
+    if (sportId) {
+      window.history.pushState({}, "", `/${sportId}`);
+      setCurrentSportId(sportId);
+    } else {
+      window.history.pushState({}, "", "/");
+      setCurrentSportId(null);
+    }
+    setShowSaved(false);
+    window.scrollTo({ top: 0 });
+  };
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handler = () => setCurrentSportId(getSportFromURL());
+    window.addEventListener("popstate", handler);
+    return () => window.removeEventListener("popstate", handler);
+  }, []);
 
   const toggleSave = (videoId, video) => {
     setSaved(prev => {
@@ -47,32 +74,31 @@ export default function App() {
 
   const savedCount = Object.keys(saved).length;
 
-  if (selectedSport && !showSaved) {
+  if (currentSportId) {
+    const config = SPORTS_CONFIG[currentSportId];
+    const sport = { id: currentSportId, label: config.label, emoji: config.emoji };
     return (
       <DrillVault
-        sport={selectedSport}
-        onBack={() => setSelectedSport(null)}
+        sport={sport}
+        onBack={() => navigateTo(null)}
         saved={saved}
         savedVideos={savedVideos}
         toggleSave={toggleSave}
         savedCount={savedCount}
-        onShowSaved={() => setShowSaved(true)}
       />
     );
   }
 
   return (
-    <>
-      <SportSelect
-        onSelect={(sport) => { setSelectedSport(sport); setShowSaved(false); }}
-        savedCount={savedCount}
-        onShowSaved={() => setShowSaved(true)}
-        savedVideos={savedVideos}
-        saved={saved}
-        toggleSave={toggleSave}
-        showSaved={showSaved}
-        onHideSaved={() => setShowSaved(false)}
-      />
-    </>
+    <SportSelect
+      onSelect={(sport) => navigateTo(sport.id)}
+      savedCount={savedCount}
+      onShowSaved={() => setShowSaved(true)}
+      savedVideos={savedVideos}
+      saved={saved}
+      toggleSave={toggleSave}
+      showSaved={showSaved}
+      onHideSaved={() => setShowSaved(false)}
+    />
   );
 }
