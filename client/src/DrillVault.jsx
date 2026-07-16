@@ -7,6 +7,38 @@ function buildQuery(sportQueryName, skillId, age, custom) {
   return [skillId, ageTerm, "drill"].filter(Boolean).join(" ");
 }
 
+function buildShareUrl(sportId, termId, videoId) {
+  const p = new URLSearchParams();
+  if (termId) p.set("drill", termId);
+  if (videoId) p.set("v", videoId);
+  return `${window.location.origin}/${sportId}?${p.toString()}`;
+}
+
+async function shareVideo(sportId, termId, videoId, title, onCopied) {
+  const url = buildShareUrl(sportId, termId, videoId);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text: title, url });
+      return;
+    } catch (err) {
+      if (err.name === "AbortError") return;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = url;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  }
+  onCopied?.();
+}
+
 function formatCount(n) {
   if (!n) return null;
   const num = parseInt(n, 10);
@@ -26,7 +58,7 @@ function timeAgo(dateStr) {
 }
 
 // ─── VIDEO MODAL ──────────────────────────────────────────────────────────────
-function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, hasPrev, color }) {
+function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, hasPrev, color, sportId, termId }) {
   const videoId = video.id?.videoId || video.id;
   const { snippet, statistics } = video;
   const views = formatCount(statistics?.viewCount);
@@ -66,6 +98,9 @@ function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, ha
             </div>
           </div>
           <div style={{ display: "flex", gap: 8, flexShrink: 0, alignItems: "center" }}>
+            <button onClick={() => shareVideo(sportId, termId, videoId, snippet.title)} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#64748B", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+              ↗ Share
+            </button>
             <button onClick={() => onSave(videoId, video)} style={{ background: saved ? `${color}20` : "rgba(255,255,255,0.05)", border: `1.5px solid ${saved ? color : "rgba(255,255,255,0.1)"}`, color: saved ? color : "#64748B", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
               {saved ? "♥ Saved" : "♡ Save"}
             </button>
@@ -82,8 +117,9 @@ function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, ha
 }
 
 // ─── VIDEO CARD ───────────────────────────────────────────────────────────────
-function VideoCard({ video, saved, onSave, onWatch, isActive, color }) {
+function VideoCard({ video, saved, onSave, onWatch, isActive, color, sportId, termId }) {
   const videoId = video.id?.videoId || video.id;
+  const [copied, setCopied] = useState(false);
   const { snippet, statistics } = video;
   const thumb = snippet?.thumbnails?.medium?.url;
   const views = formatCount(statistics?.viewCount);
@@ -105,9 +141,15 @@ function VideoCard({ video, saved, onSave, onWatch, isActive, color }) {
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 15px", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
         <button style={{ background: `${color}18`, border: `1.5px solid ${color}40`, color, borderRadius: 7, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }} onClick={e => { e.stopPropagation(); onWatch(videoId); }}>▶ Watch</button>
-        <button style={{ background: saved ? `${color}18` : "rgba(255,255,255,0.04)", border: `1.5px solid ${saved ? color : "rgba(255,255,255,0.08)"}`, color: saved ? color : "#475569", borderRadius: 7, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }} onClick={e => { e.stopPropagation(); onSave(videoId, video); }}>
-          {saved ? "♥ Saved" : "♡ Save"}
-        </button>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button style={{ background: "rgba(255,255,255,0.04)", border: "1.5px solid rgba(255,255,255,0.08)", color: copied ? color : "#475569", borderRadius: 7, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s", whiteSpace: "nowrap" }}
+            onClick={e => { e.stopPropagation(); shareVideo(sportId, termId, videoId, snippet.title, () => { setCopied(true); setTimeout(() => setCopied(false), 2000); }); }}>
+            {copied ? "✓ Copied" : "↗ Share"}
+          </button>
+          <button style={{ background: saved ? `${color}18` : "rgba(255,255,255,0.04)", border: `1.5px solid ${saved ? color : "rgba(255,255,255,0.08)"}`, color: saved ? color : "#475569", borderRadius: 7, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s" }} onClick={e => { e.stopPropagation(); onSave(videoId, video); }}>
+            {saved ? "♥ Saved" : "♡ Save"}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -128,7 +170,7 @@ function Skeleton() {
 }
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
-export default function DrillVault({ sport, onBack, saved, savedVideos, toggleSave, savedCount, onShowSaved }) {
+export default function DrillVault({ sport, deepLink, onBack, saved, savedVideos, toggleSave, savedCount, onShowSaved }) {
   const config = SPORTS_CONFIG[sport.id];
   const { color, queryName, categories } = config;
 
@@ -145,7 +187,9 @@ export default function DrillVault({ sport, onBack, saved, savedVideos, toggleSa
   const [loadingMore, setLoadingMore] = useState(false);
   const [lastQuery, setLastQuery] = useState("");
   const [activeVideoId, setActiveVideoId] = useState(null);
+  const [pendingVideoId, setPendingVideoId] = useState(null);
   const stickyBarRef = useRef(null);
+  const hydrated = useRef(false);
 
   const cat = categories.find(c => c.id === activeCat);
 
@@ -199,6 +243,51 @@ export default function DrillVault({ sport, onBack, saved, savedVideos, toggleSa
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // When a shared link opens: find the drill, run the search, queue the video
+  useEffect(() => {
+    if (hydrated.current) return;
+    hydrated.current = true;
+    if (!deepLink?.termId && !deepLink?.videoId) return;
+
+    if (deepLink.termId) {
+      for (const c of categories) {
+        const skill = c.skills.find(s => s.id === deepLink.termId);
+        if (skill) {
+          setActiveCat(c.id);
+          setActiveTerm(skill);
+          search(null, skill);
+          break;
+        }
+      }
+    }
+    if (deepLink.videoId) setPendingVideoId(deepLink.videoId);
+  }, [deepLink, categories, search]);
+
+  // Once results arrive, open the shared video
+  useEffect(() => {
+    if (!pendingVideoId) return;
+    if (loading) return;
+    const match = videos.find(v => (v.id?.videoId || v.id) === pendingVideoId);
+    if (match) {
+      setActiveVideoId(pendingVideoId);
+    } else if (searched) {
+      // Video not in current results — play it anyway
+      setActiveVideoId(pendingVideoId);
+      setVideos(prev => [{ id: pendingVideoId, snippet: { title: "Shared drill", channelTitle: "Shared", thumbnails: {} } }, ...prev]);
+    }
+    setPendingVideoId(null);
+  }, [pendingVideoId, videos, loading, searched]);
+
+  // Keep the address bar in sync so Share always reflects what you're viewing
+  useEffect(() => {
+    if (!hydrated.current) return;
+    const p = new URLSearchParams();
+    if (activeTerm?.id) p.set("drill", activeTerm.id);
+    if (activeVideoId) p.set("v", activeVideoId);
+    const qs = p.toString();
+    window.history.replaceState({}, "", `/${sport.id}${qs ? `?${qs}` : ""}`);
+  }, [activeTerm, activeVideoId, sport.id]);
+
   const displayVideos = view === "saved" ? savedVideos : videos;
   const activeIndex = displayVideos.findIndex(v => (v.id?.videoId || v.id) === activeVideoId);
   const activeVideo = activeIndex >= 0 ? displayVideos[activeIndex] : null;
@@ -223,7 +312,7 @@ export default function DrillVault({ sport, onBack, saved, savedVideos, toggleSa
 
       {activeVideo && (
         <VideoModal
-          video={activeVideo} color={color}
+          video={activeVideo} color={color} sportId={sport.id} termId={activeTerm?.id}
           onClose={() => setActiveVideoId(null)}
           onSave={toggleSave} saved={!!saved[activeVideoId]}
           onNext={() => { if (activeIndex < displayVideos.length - 1) setActiveVideoId(displayVideos[activeIndex + 1].id?.videoId || displayVideos[activeIndex + 1].id); }}
@@ -307,7 +396,7 @@ export default function DrillVault({ sport, onBack, saved, savedVideos, toggleSa
               {savedCount === 0
                 ? <div style={{ textAlign: "center", padding: "72px 0" }}><div style={{ fontSize: 44, marginBottom: 14 }}>♡</div><div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Nothing saved yet</div><div style={{ fontSize: 14, color: "#475569" }}>Hit Save on any video to collect it here.</div></div>
                 : <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
-                    {savedVideos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={setActiveVideoId} isActive={vid === activeVideoId} color={color} />; })}
+                    {savedVideos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={setActiveVideoId} isActive={vid === activeVideoId} color={color} sportId={sport.id} termId={activeTerm?.id} />; })}
                   </div>
               }
             </div>
@@ -410,7 +499,7 @@ export default function DrillVault({ sport, onBack, saved, savedVideos, toggleSa
                     ? <div style={{ textAlign: "center", padding: "72px 0" }}><div style={{ fontSize: 44, marginBottom: 14 }}>🔍</div><div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>No results</div><div style={{ fontSize: 14, color: "#475569" }}>Try a different term or adjust the age filter.</div></div>
                     : <>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
-                          {videos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={setActiveVideoId} isActive={vid === activeVideoId} color={color} />; })}
+                          {videos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={setActiveVideoId} isActive={vid === activeVideoId} color={color} sportId={sport.id} termId={activeTerm?.id} />; })}
                         </div>
                         {nextPage && (
                           <div style={{ textAlign: "center", padding: "32px 0 48px" }}>

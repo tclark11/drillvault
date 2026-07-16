@@ -28,6 +28,13 @@ export default function App() {
 
   const [currentSportId, setCurrentSportId] = useState(getSportFromURL);
 
+  // Read drill + video from the shared link
+  const getDeepLink = () => {
+    const p = new URLSearchParams(window.location.search);
+    return { termId: p.get("drill"), videoId: p.get("v") };
+  };
+  const [deepLink, setDeepLink] = useState(getDeepLink);
+
   const navigateTo = (sportId) => {
     if (sportId) {
       window.history.pushState({}, "", `/${sportId}`);
@@ -36,13 +43,17 @@ export default function App() {
       window.history.pushState({}, "", "/");
       setCurrentSportId(null);
     }
+    setDeepLink({ termId: null, videoId: null });
     setShowSaved(false);
     window.scrollTo({ top: 0 });
   };
 
   // Handle browser back/forward buttons
   useEffect(() => {
-    const handler = () => setCurrentSportId(getSportFromURL());
+    const handler = () => {
+      setCurrentSportId(getSportFromURL());
+      setDeepLink(getDeepLink());
+    };
     window.addEventListener("popstate", handler);
     return () => window.removeEventListener("popstate", handler);
   }, []);
@@ -80,6 +91,7 @@ export default function App() {
     return (
       <DrillVault
         sport={sport}
+        deepLink={deepLink}
         onBack={() => navigateTo(null)}
         saved={saved}
         savedVideos={savedVideos}
