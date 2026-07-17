@@ -16,6 +16,15 @@ function buildShareUrl(sportId, termId, videoId) {
 
 async function shareVideo(sportId, termId, videoId, title, onCopied) {
   const url = buildShareUrl(sportId, termId, videoId);
+
+  if (window.gtag) {
+    window.gtag("event", "share_drill", {
+      sport: sportId,
+      drill: termId || "custom_search",
+      video_id: videoId,
+    });
+  }
+
   if (navigator.share) {
     try {
       await navigator.share({ title, text: title, url });
