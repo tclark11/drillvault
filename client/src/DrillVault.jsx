@@ -203,6 +203,17 @@ export default function DrillVault({ sport, deepLink, onBack, saved, savedVideos
 
   const cat = categories.find(c => c.id === activeCat);
 
+  const watchVideo = (vid) => {
+    if (window.gtag) {
+      window.gtag("event", "watch_drill", {
+        sport: sport.id,
+        drill: activeTerm?.id || "custom_search",
+        video_id: vid,
+      });
+    }
+    setActiveVideoId(vid);
+  };
+
   const search = useCallback(async (pageToken = null, termOverride = null) => {
     const termToUse = termOverride !== null ? termOverride : activeTerm;
     const query = buildQuery(queryName, termToUse?.id || "", age, customQ);
@@ -406,7 +417,7 @@ export default function DrillVault({ sport, deepLink, onBack, saved, savedVideos
               {savedCount === 0
                 ? <div style={{ textAlign: "center", padding: "72px 0" }}><div style={{ fontSize: 44, marginBottom: 14 }}>♡</div><div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Nothing saved yet</div><div style={{ fontSize: 14, color: "#475569" }}>Hit Save on any video to collect it here.</div></div>
                 : <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
-                    {savedVideos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={setActiveVideoId} isActive={vid === activeVideoId} color={color} sportId={sport.id} termId={activeTerm?.id} />; })}
+                    {savedVideos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={watchVideo} isActive={vid === activeVideoId} color={color} sportId={sport.id} termId={activeTerm?.id} />; })}
                   </div>
               }
             </div>
@@ -509,7 +520,7 @@ export default function DrillVault({ sport, deepLink, onBack, saved, savedVideos
                     ? <div style={{ textAlign: "center", padding: "72px 0" }}><div style={{ fontSize: 44, marginBottom: 14 }}>🔍</div><div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>No results</div><div style={{ fontSize: 14, color: "#475569" }}>Try a different term or adjust the age filter.</div></div>
                     : <>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
-                          {videos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={setActiveVideoId} isActive={vid === activeVideoId} color={color} sportId={sport.id} termId={activeTerm?.id} />; })}
+                          {videos.map(v => { const vid = v.id?.videoId || v.id; return <VideoCard key={vid} video={v} saved={!!saved[vid]} onSave={toggleSave} onWatch={watchVideo} isActive={vid === activeVideoId} color={color} sportId={sport.id} termId={activeTerm?.id} />; })}
                         </div>
                         {nextPage && (
                           <div style={{ textAlign: "center", padding: "32px 0 48px" }}>
