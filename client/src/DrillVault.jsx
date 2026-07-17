@@ -93,7 +93,7 @@ function VideoModal({ video, onClose, onSave, saved, onNext, onPrev, hasNext, ha
           <button onClick={() => shareVideo(sportId, termId, videoId, snippet.title)} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#64748B", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
             ↗ Share
           </button>
-          <button onClick={() => onSave(videoId, video)} style={{ background: saved ? `${color}20` : "rgba(255,255,255,0.05)", border: `1.5px solid ${saved ? color : "rgba(255,255,255,0.1)"}`, color: saved ? color : "#64748B", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" marginRight: "auto", justifyContent: "flex-start" }}>
+          <button onClick={() => onSave(videoId, video)} style={{ background: saved ? `${color}20` : "rgba(255,255,255,0.05)", border: `1.5px solid ${saved ? color : "rgba(255,255,255,0.1)"}`, color: saved ? color : "#64748B", borderRadius: 8, padding: "7px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", marginRight: "auto" }}>
             {saved ? "♥ Saved" : "♡ Save"}
           </button>
           <button onClick={onClose} style={{ background: "rgba(255,255,255,0.05)", border: "1.5px solid rgba(255,255,255,0.1)", color: "#94A3B8", borderRadius: 8, width: 34, height: 34, fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "inherit", flexShrink: 0 }}>✕</button>
